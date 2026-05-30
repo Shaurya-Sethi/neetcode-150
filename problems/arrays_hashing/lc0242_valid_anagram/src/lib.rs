@@ -28,6 +28,6 @@ mod tests {
     fn test_not_anagram_returns_false() {
         let s: String = "batman".to_string();
         let t: String = "tabnan".to_string();
-        assert_eq!(solve(s, t), false);
+        assert!(!solve(s, t));
     }
 }

@@ -22,6 +22,6 @@ mod tests {
 
     #[test]
     fn test_all_unique_returns_false() {
-        assert_eq!(solve(vec![1, 2, 3, 4]), false);
+        assert!(!solve(vec![1, 2, 3, 4]));
     }
 }
