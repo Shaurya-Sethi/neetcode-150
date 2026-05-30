@@ -1,16 +1,13 @@
-use std::collections::HashMap;
 pub fn solve(s: String, t: String) -> bool {
-    if !s.len() == t.len() {
+    if s.len() != t.len() {
         return false;
     }
-    let mut map = HashMap::new();
-    for b in s.as_bytes() {
-        map.entry(b).and_modify(|count| *count += 1).or_insert(1);
+    let mut arr = [0; 26];
+    for (sb, tb) in s.as_bytes().iter().zip(t.as_bytes().iter()) {
+        arr[(sb - b'a') as usize] += 1;
+        arr[(tb - b'a') as usize] -= 1;
     }
-    for b in t.as_bytes() {
-        map.entry(b).and_modify(|count| *count -= 1).or_insert(1);
-    }
-    map.into_iter().all(|(_, count)| count == 0)
+    arr.into_iter().all(|count| count == 0)
 }
 
 #[cfg(test)]
