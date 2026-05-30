@@ -4,7 +4,7 @@ Source: neetcode-gh/leetcode .problemSiteData.json
 
 ## Arrays & Hashing
 - [x] LC0217 Contains Duplicate
-- [ ] LC0242 Valid Anagram
+- [x] LC0242 Valid Anagram
 - [ ] LC0001 Two Sum
 - [ ] LC0049 Group Anagrams
 - [ ] LC0347 Top K Frequent Elements
