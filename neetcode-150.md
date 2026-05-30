@@ -3,7 +3,7 @@
 Source: neetcode-gh/leetcode .problemSiteData.json
 
 ## Arrays & Hashing
-- [ ] LC0217 Contains Duplicate
+- [x] LC0217 Contains Duplicate
 - [ ] LC0242 Valid Anagram
 - [ ] LC0001 Two Sum
 - [ ] LC0049 Group Anagrams
