@@ -7,6 +7,13 @@ name = "common"
 version = "0.1.0"
 
 [[package]]
+name = "lc0001_two_sum"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
+
+[[package]]
 name = "lc0217_contains_duplicate"
 version = "0.1.0"
 dependencies = [
