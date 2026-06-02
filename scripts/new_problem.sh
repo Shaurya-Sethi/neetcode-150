@@ -89,21 +89,56 @@ Output requirements:
 EOF
 )
 
+AGY_PRINT_TIMEOUT="${AGY_PRINT_TIMEOUT:-5m}"
+AGY_STDERR_TMP="$(mktemp)"
+trap 'rm -f "$AGY_STDERR_TMP"' EXIT
+
+echo "Generating ${REL_DIR}/README.md via agy (timeout: ${AGY_PRINT_TIMEOUT})..." >&2
+
 set +e
-GEMINI_OUTPUT="$(agy -p "$PROMPT" --dangerously-skip-permissions 2>&1)"
+GEMINI_OUTPUT="$(
+  agy -p "$PROMPT" \
+    --dangerously-skip-permissions \
+    --print-timeout "$AGY_PRINT_TIMEOUT" \
+    2> >(tee "$AGY_STDERR_TMP" >&2) \
+    | tee /dev/stderr
+)"
 GEMINI_EXIT_CODE=$?
 set -e
 
 if [ "$GEMINI_EXIT_CODE" -ne 0 ]; then
   echo "agy failed while generating ${REL_DIR}/README.md" >&2
-  printf '%s\n' "$GEMINI_OUTPUT" >&2
+  # stdout (if any)
+  if [ -n "$GEMINI_OUTPUT" ]; then
+    printf '%s\n' "$GEMINI_OUTPUT" >&2
+  fi
   exit "$GEMINI_EXIT_CODE"
 fi
 
-if [ "$(printf '%s' "$GEMINI_OUTPUT" | tr -d '[:space:]')" = "${README_UNAVAILABLE_SENTINEL}" ]; then
+# agy currently exits 0 for some errors (notably print-mode timeouts).
+case "$GEMINI_OUTPUT" in
+  "Error:"*)
+    echo "agy reported an error while generating ${REL_DIR}/README.md" >&2
+    printf '%s\n' "$GEMINI_OUTPUT" >&2
+    exit 1
+    ;;
+esac
+
+LAST_NONEMPTY_LINE="$(printf '%s\n' "$GEMINI_OUTPUT" | awk 'NF { line=$0 } END { print line }')"
+if [ "$(printf '%s' "$LAST_NONEMPTY_LINE" | tr -d '[:space:]')" = "${README_UNAVAILABLE_SENTINEL}" ]; then
   echo "Skipped README generation: exact content unavailable from LeetCode and fallback sources."
   exit 0
 fi
 
-printf '%s\n' "$GEMINI_OUTPUT" > "$README_PATH"
+# agy sometimes prints progress / tool-plans to stdout before the final answer.
+# Extract the final README payload starting at the required header.
+README_HEADER="# ${SLUG}"
+CLEAN_OUTPUT="$(printf '%s\n' "$GEMINI_OUTPUT" | awk -v h="$README_HEADER" 'found || $0==h { found=1 } found { print }')"
+
+if [ -z "$CLEAN_OUTPUT" ]; then
+  echo "agy succeeded but output did not contain expected README header: ${README_HEADER}" >&2
+  exit 1
+fi
+
+printf '%s\n' "$CLEAN_OUTPUT" > "$README_PATH"
 echo "Generated ${REL_DIR}/README.md"
