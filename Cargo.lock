@@ -14,6 +14,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "lc0049_group_anagrams"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
+
+[[package]]
 name = "lc0217_contains_duplicate"
 version = "0.1.0"
 dependencies = [
