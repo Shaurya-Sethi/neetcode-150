@@ -6,7 +6,7 @@ Source: neetcode-gh/leetcode .problemSiteData.json
 - [x] LC0217 Contains Duplicate
 - [x] LC0242 Valid Anagram
 - [x] LC0001 Two Sum
-- [ ] LC0049 Group Anagrams
+- [x] LC0049 Group Anagrams
 - [ ] LC0347 Top K Frequent Elements
 - [ ] LC0238 Product of Array Except Self
 - [ ] LC0036 Valid Sudoku
