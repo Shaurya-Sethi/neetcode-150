@@ -18,16 +18,28 @@ mod tests {
 
     #[test]
     fn test_valid_returns_correct_indexes() {
-        assert_eq!(solve(vec![2, 7, 11, 15], 9), vec![0, 1]);
+        let mut actual = solve(vec![2, 7, 11, 15], 9);
+        actual.sort_unstable();
+        let mut expected = vec![0, 1];
+        expected.sort_unstable();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_duplicates_return_correct_indexes() {
-        assert_eq!(solve(vec![3, 3], 6), vec![0, 1]);
+        let mut actual = solve(vec![3, 3], 6);
+        actual.sort_unstable();
+        let mut expected = vec![0, 1];
+        expected.sort_unstable();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_negative_numbers() {
-        assert_eq!(solve(vec![-3, 4, 3, 90], 0), vec![0, 2]);
+        let mut actual = solve(vec![-3, 4, 3, 90], 0);
+        actual.sort_unstable();
+        let mut expected = vec![0, 2];
+        expected.sort_unstable();
+        assert_eq!(actual, expected);
     }
 }
