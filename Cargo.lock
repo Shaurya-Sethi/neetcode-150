@@ -33,3 +33,10 @@ version = "0.1.0"
 dependencies = [
  "common",
 ]
+
+[[package]]
+name = "lc0347_top_k_frequent_elements"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
